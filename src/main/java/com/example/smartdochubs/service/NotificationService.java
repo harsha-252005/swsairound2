@@ -29,8 +29,19 @@ public class NotificationService {
         messagingTemplate.convertAndSend("/topic/notifications", n);
     }
 
+    public List<Notification> getAll() {
+        return repository.findAll();
+    }
+
     public List<Notification> getUnread() {
         return repository.findByReadFalse();
+    }
+
+    public void markOneRead(Long id) {
+        repository.findById(id).ifPresent(n -> {
+            n.setRead(true);
+            repository.save(n);
+        });
     }
 
     public void markAllRead() {

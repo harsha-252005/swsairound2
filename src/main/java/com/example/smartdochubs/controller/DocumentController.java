@@ -1,7 +1,6 @@
 package com.example.smartdochubs.controller;
 
 import com.example.smartdochubs.model.Document;
-import com.example.smartdochubs.model.Notification;
 import com.example.smartdochubs.service.DocumentService;
 import com.example.smartdochubs.service.NotificationService;
 import org.springframework.core.io.FileSystemResource;
@@ -55,14 +54,4 @@ public class DocumentController {
                 .body(resource);
     }
 
-    @GetMapping("/notifications/unread")
-    public ResponseEntity<List<Notification>> getUnread() {
-        return ResponseEntity.ok(notificationService.getUnread());
-    }
-
-    @PostMapping("/notifications/read")
-    public ResponseEntity<Void> markRead() {
-        notificationService.markAllRead();
-        return ResponseEntity.ok().build();
-    }
 }
