@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+* {
+  font-family: 'Livvic', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
