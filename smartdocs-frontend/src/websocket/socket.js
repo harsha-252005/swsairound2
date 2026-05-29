@@ -1,35 +1,30 @@
-import { Client } from '@stomp/stompjs'
-import SockJS from 'sockjs-client'
+// Vercel serverless does not support WebSocket persistent connections.
+// Using polling instead — checks for new notifications every 10 seconds.
 
-let client = null
+let interval = null
 
 export const connectSocket = (onNotification) => {
-  try {
-    client = new Client({
-      webSocketFactory: () => new SockJS(`${import.meta.env.VITE_API_URL}/ws`),
-      reconnectDelay: 5000,
-      onConnect: () => {
-        client.subscribe('/topic/notifications', (message) => {
-          try {
-            onNotification(JSON.parse(message.body))
-          } catch {
-            // ignore malformed messages
-          }
-        })
-      },
-      onStompError: () => {},
-      onWebSocketError: () => {},
-    })
-    client.activate()
-  } catch {
-    // ignore connection errors
+  let lastCount = 0
+
+  const poll = async () => {
+    try {
+      const res = await fetch('/api/notifications')
+      const data = await res.json()
+      const unread = data.filter((n) => !n.read)
+      if (unread.length > lastCount) {
+        const newOnes = unread.slice(0, unread.length - lastCount)
+        newOnes.forEach((n) => onNotification(n))
+      }
+      lastCount = unread.length
+    } catch {
+      // ignore network errors
+    }
   }
+
+  poll()
+  interval = setInterval(poll, 10000)
 }
 
 export const disconnectSocket = () => {
-  try {
-    if (client) client.deactivate()
-  } catch {
-    // ignore
-  }
+  if (interval) clearInterval(interval)
 }

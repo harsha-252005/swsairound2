@@ -33,11 +33,12 @@ export default function DocumentsPage() {
 
   useEffect(() => { load() }, [])
 
-  const handleDownload = (id, originalName) => {
+  const handleDownload = (filePath, originalName) => {
     try {
       const a = document.createElement('a')
-      a.href = downloadUrl(id)
+      a.href = filePath
       a.download = originalName
+      a.target = '_blank'
       a.click()
     } catch {
       toast.error('Download failed. Please try again.')
@@ -123,19 +124,19 @@ export default function DocumentsPage() {
                         <div className="w-7 h-7 bg-blue-50 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-blue-100 transition-colors">
                           <FileText size={13} className="text-blue-500" />
                         </div>
-                        <span className="text-slate-700 font-medium truncate max-w-xs">{doc.originalName}</span>
+                        <span className="text-slate-700 font-medium truncate max-w-xs">{doc.original_name}</span>
                       </div>
                     </td>
                     <td className="px-5 py-3.5">
                       <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">
-                        {doc.fileType?.replace('application/', '') ?? '-'}
+                        {doc.file_type?.replace('application/', '') ?? '-'}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 text-slate-500">{formatSize(doc.fileSize)}</td>
-                    <td className="px-5 py-3.5 text-slate-500">{formatDate(doc.uploadDate)}</td>
+                    <td className="px-5 py-3.5 text-slate-500">{formatSize(doc.file_size)}</td>
+                    <td className="px-5 py-3.5 text-slate-500">{formatDate(doc.upload_date)}</td>
                     <td className="px-5 py-3.5">
                       <button
-                        onClick={() => handleDownload(doc.id, doc.originalName)}
+                        onClick={() => handleDownload(doc.file_path, doc.original_name)}
                         className="flex items-center gap-1.5 text-blue-500 hover:text-blue-700 font-medium
                           hover:bg-blue-50 px-2.5 py-1.5 rounded-lg transition-all duration-150"
                       >

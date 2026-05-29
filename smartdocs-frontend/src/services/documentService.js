@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE = `${import.meta.env.VITE_API_URL}/api/documents`
+const BASE = '/api'
 
 export const uploadDocuments = (files, onProgress) => {
   const form = new FormData()
@@ -10,6 +10,6 @@ export const uploadDocuments = (files, onProgress) => {
   })
 }
 
-export const fetchDocuments = () => axios.get(BASE)
+export const fetchDocuments = () => axios.get(`${BASE}/documents`)
 
-export const downloadUrl = (id) => `${BASE}/download/${id}`
+export const downloadUrl = (filePath) => filePath

@@ -3,7 +3,7 @@ import { connectSocket, disconnectSocket } from '../websocket/socket'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 
-const BASE = `${import.meta.env.VITE_API_URL}/api/notifications`
+const BASE = '/api/notifications'
 const NotificationContext = createContext()
 
 export function NotificationProvider({ children }) {
